@@ -1,0 +1,9 @@
+{
+  "name": "d3js-fishbone",
+  "private": true,
+  "dependencies": {
+    "d3": "~3.4.1",
+    "jQuery": "~2.2.0"
+
+  }
+}

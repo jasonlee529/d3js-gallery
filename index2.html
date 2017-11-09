@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<head>
+    <title>d3 Fishbone diagram</title>
+    <meta charset="utf-8">
+    <style>
+        @import url("./styles/style.css");
+    </style>
+</head>
+<body>
+<script src="./bower_components/d3/d3.js" charset="utf-8"></script>
+<script src="./plugins/d3.fishbone.js" charset="utf-8"></script>
+<script>
+    // create the configurable selection modifier
+    var fishbone = d3.fishbone();
+
+    d3.csv("./data/stan-path-gao.csv", function (csv) {
+        var data = [];
+        csv.forEach(function (n) {
+            var fExist = false;
+            data.forEach(function (d) {
+                if (n.days === d.days) {
+                    fExist = true;
+                    var sExist = false;
+                    d.children.forEach(function(m){
+                        if(n.class_name === m.class_name){
+                            sExist = true;
+                            var third = deepCopy(n);
+                            if(third.color){
+                                m.children.push(third);
+                                third.name = third.stan_order;
+                                third.amount = third.amount3;
+                            }
+                        }
+
+                    })
+                    if(!sExist){
+                        var second = deepCopy(n);
+                        d.children.push(second);
+                        second.name = second.class_name;
+                        second.amount = second.amount2;
+                        second.children = [];
+                        var third = deepCopy(n);
+                        //if(third.color){
+                            second.children.push(third);
+                            third.name = third.stan_order;
+                            third.amount = third.amount3;
+                        //}
+                    }
+                }
+            });
+            if(!fExist){
+                var first = deepCopy(n);
+                first.name = "第"+n.days+"天";
+                first.children = [];
+                first.amount = first.amount1;
+                data.push(first);
+                var second = deepCopy(n);
+                first.children.push(second);
+                second.name = second.class_name;
+                second.amount = second.amount2;
+                second.children = [];
+                var third = deepCopy(n);
+                if(third.color){
+                    second.children.push(third);
+                    third.name = third.stan_order;
+                    third.amount = third.amount3;
+                }
+
+            }
+        });
+        drawFishbone({"name":"",children:data});
+
+    })
+
+    var deepCopy = function(obj){
+        return JSON.parse(JSON.stringify(obj));
+    }
+    var drawFishbone = function (data) {
+        var size = (function () {
+                return {width: this.clientWidth, height: this.clientHeight};
+            }).bind(window.document.documentElement),
+
+            svg = d3.select("body")
+                .append("svg")
+                // firefox needs a real size
+                .attr(size())
+                // set the data so the reusable chart can find it
+                .datum(data)
+                // set up the default arrowhead
+                .call(fishbone.defaultArrow)
+                // call the selection modifier
+                .call(fishbone);
+
+        // this is the actual `force`: just start it
+        fishbone.force().start();
+
+        // handle resizing the window
+        d3.select(window).on("resize", function () {
+            fishbone.force()
+                .size([size().width, size().height])
+                .start();
+            svg.attr(size())
+        });
+    }
+
+</script>
+</body>
+</html>
