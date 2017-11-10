@@ -13,7 +13,7 @@
     // create the configurable selection modifier
     var fishbone = d3.fishbone();
 
-    d3.csv("./data/stan-path-diabetes1.csv", function (csv) {
+    d3.csv("./data/stan-path-guo.csv", function (csv) {
         var data = [];
         csv.forEach(function (n) {
             var fExist = false;
@@ -39,7 +39,6 @@
                         second.name = second.class_name;
                         second.amount = second.amount2;
                         second.children = [];
-                        second.color = null;
                         var third = deepCopy(n);
                         //if(third.color){
                             second.children.push(third);
@@ -54,13 +53,11 @@
                 first.name = "第"+n.days+"天";
                 first.children = [];
                 first.amount = first.amount1;
-                first.color = null;
                 data.push(first);
                 var second = deepCopy(n);
                 first.children.push(second);
                 second.name = second.class_name;
                 second.amount = second.amount2;
-                second.color = null;
                 second.children = [];
                 var third = deepCopy(n);
                 if(third.color){
@@ -71,6 +68,7 @@
 
             }
         });
+        console.log(data);
         drawFishbone({"name":"",children:data});
 
     })

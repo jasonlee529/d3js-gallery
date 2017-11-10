@@ -51,7 +51,7 @@ THE SOFTWARE.
 
             // the label accessor
             _label = function (d) {
-                if(d.depth>=1){
+                if(d.depth>=1 && d.amount){
                     return d.name+":"+d.amount;
                 }
                 return d.name;
@@ -150,7 +150,7 @@ THE SOFTWARE.
                     },
                     "stroke": function (d) {
                        if(d.color){
-                            return "#d62728";
+                            return d.color;
                         }
                     },
                     "text-anchor": function (d) {
