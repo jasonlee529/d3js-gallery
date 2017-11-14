@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>all class name</title>
+    <title>all stan order</title>
 </head>
 <svg width="1760" height="880"></svg>
 <script src="./bower_components/d3/d3.js"></script>
@@ -14,7 +14,7 @@
 
     var formatNumber = d3.format(",.0f"),
         format = function (d) {
-            return formatNumber(d) + " TWh";
+            return formatNumber(d);
         },
         color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -36,7 +36,7 @@
         .attr("font-size", 10)
         .selectAll("g");
 
-    d3.json("./data/all_class_name.json", function (error, energy) {
+    d3.json("./data/all_stan_order.json", function (error, energy) {
         if (error) throw error;
 
         sankey(energy);
