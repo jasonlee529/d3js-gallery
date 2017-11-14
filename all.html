@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>桑基图－诊断class_name</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<div id="main" style="width: 1200px;height:800px;"></div>
+<script type="application/javascript" src="./bower_components/jQuery/dist/jquery.js" charset="utf-8" ></script>
+<script type="application/javascript" src="./bower_components/echarts/dist/echarts.js" charset="UTF-8" ></script>
+<script type="application/javascript">
+        var myChart = echarts.init(document.getElementById("main"));
+        myChart.showLoading();
+        $.get('data/energy.json', function (data) {
+            myChart.hideLoading();
+
+            myChart.setOption(option = {
+                title: {
+                    text: 'Sankey Diagram'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove'
+                },
+                series: [
+                    {
+                        type: 'sankey',
+                        layout: 'none',
+                        data: data.nodes,
+                        links: data.links,
+                        itemStyle: {
+                            normal: {
+                                borderWidth: 1,
+                                borderColor: '#aaa'
+                            }
+                        },
+                        lineStyle: {
+                            normal: {
+                                color: 'source',
+                                curveness: 0.5
+                            }
+                        }
+                    }
+                ]
+            });
+        });
+</script>
+</body>
+</html>
