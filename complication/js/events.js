@@ -162,7 +162,7 @@ function highlightLink(g,on) {
         var text=d3.select(document.getElementById("t_" + g.CMTE_ID));
          text.transition((on==true) ? 0:550)
              .style("fill",(on==true) ? "#000" : "#777")
-             .style("font-size",(on==true) ? "14px" : "12px")
+             .style("font-size",(on==true) ? "25px" : "30px")
              .style("stroke-width",((on==true) ? 2 : 0));
 
 

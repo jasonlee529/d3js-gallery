@@ -206,7 +206,7 @@ function updateChords() {
                 + (d.angle > Math.PI ? "rotate(180)" : "");
         })
         .style("fill", "#777")
-        .style("font-size", "20px")
+        .style("font-size", "21px")
         .text(function(d) { return trimLabel(pacsById[office + "_" + d.label].CMTE_NM); });
 
 

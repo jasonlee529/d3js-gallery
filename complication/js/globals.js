@@ -1,5 +1,5 @@
 
-var maxWidth=1280; 
+var maxWidth=980;
 
 var outerRadius = maxWidth / 2,
     innerRadius = outerRadius - 120,
