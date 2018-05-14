@@ -30,7 +30,6 @@ function updateLinks(links) {
             var arc=d3.svg.arc(d,i).innerRadius(linkRadius).outerRadius(innerRadius);
             totalContributions+=newArc.value;
             total.text(formatCurrency(totalContributions));
-
             return arc(newArc,i);
         })
         .on("mouseover", function (d) { node_onMouseOver(d,"CONTRIBUTION");})
@@ -207,6 +206,7 @@ function updateChords() {
                 + (d.angle > Math.PI ? "rotate(180)" : "");
         })
         .style("fill", "#777")
+        .style("font-size", "20px")
         .text(function(d) { return trimLabel(pacsById[office + "_" + d.label].CMTE_NM); });
 
 
