@@ -5,6 +5,13 @@
         <script src="https://cdn.bootcss.com/d3/2.10.0/d3.v2.js"></script>
     </head>
     <body>
+        <div style="margin:20px 0 100px;">
+            <form>
+                <label>只接受csv文件:三列分别为pati_id,pati_visit_id,illn_name
+                        <input type="file" onchange="jsReadFiles(this.files)"/>
+                </label>
+            </form>
+        </div>
         <div id="mainDiv">
             <div id="svgDiv">
             </div>
@@ -17,8 +24,75 @@
         <script src="./js/update.js"></script>
         <script src="./js/main.js"></script>
     </body>
+
+    <script>
     
-    <script >
-            fetchData("");
+    function sortAmount(a,b) {
+        return +b.Amount-+a.Amount;
+    };
+        //js 读取文件
+    function jsReadFiles(files) {
+        console.log(files.length);
+        if (files.length) {
+            var file = files[0];
+            var reader = new FileReader();//new一个FileReader实例
+            reader.onload = function() {
+                var arc = [],arcIndex = {};
+                var node = [],nodeIndex = {};
+                var link = [],linkIndex = {};
+                var pvMap = {};
+                d3.csv(this.result,function(data){
+                    var total = data.length;
+                    data.forEach(function(n,i){
+                        var pv = n.pati_id+"__"+n.pati_visit_id;
+                        if(arcIndex[n.illn_name]){
+                            arcIndex[n.illn_name] =  arcIndex[n.illn_name] +1;;
+                        }else{
+                            arcIndex[n.illn_name] = 1;
+                        }
+                        if(pvMap[pv]){
+                            pvMap[pv] =  pvMap[pv] +","+n.illn_name;
+                        }else{
+                            pvMap[pv] = n.illn_name;
+                        }
+                    })
+                    for(var k in arcIndex){
+                        arc.push({CMTE_NM:k,Amount:arcIndex[k],total:total,CMTE_ID:k});
+                    }
+                    arc = arc.sort(sortAmount);
+                    for(var k in pvMap){
+                        var value = pvMap[k];
+                        if(nodeIndex[value]){
+                            nodeIndex[value] +=1;
+                        }else{
+                            nodeIndex[value]=1;
+                        }
+                    }
+                    for(var k in nodeIndex){
+                        node.push({CAND_ID:k,CAND_NAME:k,Amount:nodeIndex[k],total:total,PTY:"REP"});
+                    }
+                    node = node.sort(sortAmount);
+                    arc.forEach(function(a){
+                        node.forEach(function(b){
+                            if(b.CAND_NAME.indexOf(a.CMTE_NM)>-1){
+                                link.push({"CMTE_ID":a.CMTE_ID,"CAND_ID":b.CAND_ID,"TRANSACTION_AMT":b.Amount,"PTY":b.PTY});
+                            }
+                        })
+                    })
+                    link.forEach(function(n,i){
+                        if(i*3<link.length){
+                            n.PTY="DEM";
+                        }
+                    })
+                    console.log(arc);
+                    console.log(node);
+                    console.log(link);
+                    fetchData({arcs:arc,nodes:node,links:link});
+                })
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+           
     </script>
-</html>
+</html>>

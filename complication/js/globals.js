@@ -137,7 +137,7 @@ var formatNumber = d3.format(",.0f"),
 
 
 function log(message) {
-   // console.log(message);
+    console.log(message);
 }
 //Events
 

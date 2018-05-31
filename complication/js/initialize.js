@@ -39,9 +39,7 @@ function initialize() {
 
         log("totalCandAmount=" + totalCandAmount);
         pacs=pacsHouse;
-        console.log(c_house);
         c_house.forEach(function (d) {
-            console.log(d);
             contr.push(d);
         });
     }
@@ -84,12 +82,9 @@ function initialize() {
     }
 
     buildChords();
-    console.log(contr)
     var totalContr=0;
     contr.forEach(function (d) {
-        console.log(d);
         nodesById[d.CAND_ID].relatedLinks.push(d);
-        console.log(d.CMTE_ID,chordsById[d.CMTE_ID])
         chordsById[d.CMTE_ID].relatedLinks.push(d);
         totalContr+= Number(d.TRANSACTION_AMT);
     })

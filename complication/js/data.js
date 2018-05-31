@@ -13,7 +13,7 @@
 var dataCalls=[];
 var numCalls=0;
 
-function fetchData(id) {
+function fetchData(data) {
 	linkGroup = undefined ;
 
 	cns=[],
@@ -78,13 +78,7 @@ function fetchData(id) {
    // addStream("/checkup/data/disease/complication/arc_disease_screen_10002.csv", onFetchPacsSenate);
 //    addStream("/checkup/data/disease/complication/Pacs_Senate.csv", onFetchPacsSenate);
 //    startFetch();
-console.log('fdafdas');
-        d3.json("./data/data.json",function(data){
-            onFetchPacsHouse(data.arcs);
-            onFetchCandidatesHouse(data.nodes);
-            onFetchContributionsHouse(data.links);
-            main();
-        });
+
   
 //    $.getJSON(ctx+'/analysis/overview/diseaseComp.json',{},function(data){
 //    	onFetchPacsHouse(data.arcs);
@@ -92,6 +86,10 @@ console.log('fdafdas');
 //    	onFetchContributionsHouse(data.links);
 //    	main();
 //    });
+onFetchPacsHouse(data.arcs);
+onFetchCandidatesHouse(data.nodes);
+onFetchContributionsHouse(data.links);
+main();
 }
 
 
@@ -166,8 +164,6 @@ function onFetchContributionsHouse(csv) {
         contributions.push(d);
         c_house.push(d);
     });
-    console.log("c_housce", c_house);
-
     log("onFetchContributionsHouse()");
     endFetch();
 
