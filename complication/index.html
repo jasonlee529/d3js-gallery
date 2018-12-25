@@ -35,6 +35,7 @@
     };
         //js 读取文件
     function jsReadFiles(files) {
+        d3.select('#mainDiv').empty();
         console.log(files.length);
         if (files.length) {
             var file = files[0];
@@ -44,27 +45,50 @@
                 var node = [],nodeIndex = {};
                 var link = [],linkIndex = {};
                 var pvMap = {};
+                var pvArc={};
+                var pvNode={};
                 d3.csv(this.result,function(data){
                     var total = data.length;
                     data.forEach(function(n,i){
                         var pv = n.pati_id+"__"+n.pati_visit_id;
-                        if(arcIndex[n.illn_name]){
-                            arcIndex[n.illn_name] =  arcIndex[n.illn_name] +1;;
-                        }else{
-                            arcIndex[n.illn_name] = 1;
-                        }
-                        if(pvMap[pv]){
-                            pvMap[pv] =  pvMap[pv] +","+n.illn_name;
-                        }else{
-                            pvMap[pv] = n.illn_name;
+                        if(!pvArc[pv+"__"+n.illn_name]){
+                            pvArc[pv+"__"+n.illn_name]=1;
+                            if(arcIndex[n.illn_name]){
+                                arcIndex[n.illn_name] =  arcIndex[n.illn_name] +1;;
+                            }else{
+                                arcIndex[n.illn_name] = 1;
+                            }
                         }
                     })
                     for(var k in arcIndex){
                         arc.push({CMTE_NM:k,Amount:arcIndex[k],total:total,CMTE_ID:k});
                     }
                     arc = arc.sort(sortAmount);
+                    arc=arc.slice(0,10);
+                    data.forEach(function(n,i){
+                        var pv = n.pati_id+"__"+n.pati_visit_id;
+                        if(!pvNode[pv+"__"+n.illn_name]){
+                            pvNode[pv+"__"+n.illn_name]=1;
+                            arc.forEach(function(a){
+                                if(n.illn_name === a.CMTE_NM){
+                                    if(pvMap[pv]){
+                                        
+                                    }else{
+                                        pvMap[pv]={};
+                                    }
+                                    pvMap[pv][n.illn_name] = 1;
+                                }
+                            })
+                        }
+                    })
                     for(var k in pvMap){
                         var value = pvMap[k];
+                        var nodeName=[];
+                        for(t in value){
+                            nodeName.push(t);
+                        }
+                        nodeName.sort();
+                        value=nodeName.join();
                         if(nodeIndex[value]){
                             nodeIndex[value] +=1;
                         }else{
@@ -72,12 +96,13 @@
                         }
                     }
                     for(var k in nodeIndex){
-                        node.push({CAND_ID:k,CAND_NAME:k,Amount:nodeIndex[k],total:total,PTY:"REP"});
+                            node.push({CAND_ID:k,CAND_NAME:k,Amount:nodeIndex[k],total:total,PTY:"REP"});
                     }
                     node = node.sort(sortAmount);
+                    // node = node.slice(0,100);
                     arc.forEach(function(a){
                         node.forEach(function(b){
-                            if(b.CAND_NAME.indexOf(a.CMTE_NM)>-1){
+                            if(b.CAND_NAME.split(",").indexOf(a.CMTE_NM)>-1){
                                 link.push({"CMTE_ID":a.CMTE_ID,"CAND_ID":b.CAND_ID,"TRANSACTION_AMT":b.Amount,"PTY":b.PTY});
                             }
                         })
@@ -87,6 +112,7 @@
                             n.PTY="DEM";
                         }
                     })
+                    
                     console.log(arc);
                     console.log(node);
                     console.log(link);
