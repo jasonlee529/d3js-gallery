@@ -44,13 +44,14 @@
                 var arc = [],arcIndex = {};
                 var node = [],nodeIndex = {};
                 var link = [],linkIndex = {};
-                var pvMap = {};
+                var pvMap = {},typeMap={};
                 var pvArc={};
                 var pvNode={};
                 d3.csv(this.result,function(data){
                     var total = data.length;
                     data.forEach(function(n,i){
                         var pv = n.pati_id+"__"+n.pati_visit_id;
+                        typeMap[n.illn_name]=n.type === 1?'REM':"REP";
                         if(!pvArc[pv+"__"+n.illn_name]){
                             pvArc[pv+"__"+n.illn_name]=1;
                             if(arcIndex[n.illn_name]){
@@ -103,15 +104,15 @@
                     arc.forEach(function(a){
                         node.forEach(function(b){
                             if(b.CAND_NAME.split(",").indexOf(a.CMTE_NM)>-1){
-                                link.push({"CMTE_ID":a.CMTE_ID,"CAND_ID":b.CAND_ID,"TRANSACTION_AMT":b.Amount,"PTY":b.PTY});
+                                link.push({"CMTE_ID":a.CMTE_ID,"CAND_ID":b.CAND_ID,"TRANSACTION_AMT":b.Amount,"PTY":typeMap[a.CMTE_ID]});
                             }
                         })
                     })
-                    link.forEach(function(n,i){
-                        if(i*3<link.length){
-                            n.PTY="DEM";
-                        }
-                    })
+                    // link.forEach(function(n,i){
+                    //     if(i*3<link.length){
+                    //         n.PTY="0";
+                    //     }
+                    // })
                     
                     console.log(arc);
                     console.log(node);
