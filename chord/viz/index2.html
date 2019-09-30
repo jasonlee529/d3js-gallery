@@ -49,7 +49,7 @@
             "#dc85b6"
         ];
         colorArr = colorArr.concat(d3.schemeCategory20c);
-        d3.csv("./data/2019.csv", function(msg) {
+        d3.csv("./data/2019-illn.csv", function(msg) {
             console.log(msg);
             msg.forEach(function(n) {
                 arc[n.source] = arc[n.source] ? arc[n.source] + 1 : 1;
@@ -111,20 +111,16 @@
             }
 
             var ch = viz.chord().data(data)
-                // .labelPadding(.01)
                 .sort(sort)
                 .label(function(d) {
+                    console.log(d);
                     return d.source;
                 })
                 .innerRadius(430)
                 .outerRadius(450)
                 .startAngle(0)
                 // .duration(1000)
-                .chordOpacity(0.3)
-                // .fill(function(d) {
-                //     return colors[d];
-                // });
-            ;
+                .chordOpacity(0.3);
 
             var width = 1200,
                 height = 1100;
