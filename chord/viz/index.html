@@ -129,11 +129,31 @@
             var width = 1200,
                 height = 1100;
 
-            var svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+            // var svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
 
-            svg.append("g").attr("transform", "translate(600,550)").call(ch);
+            // svg.append("g").attr("transform", "translate(600,550)").call(ch);
 
-            // adjust height of frame in bl.ocks.org
-            d3.select(self.frameElement).style("height", height + "px").style("width", width + "px");
+            // // adjust height of frame in bl.ocks.org
+            // d3.select(self.frameElement).style("height", height + "px").style("width", width + "px");
         }
     </script>
+<body>
+    <div style="float:left;">
+    <ul>
+        <li><a href="2019-menzhen.html" target="myFrameName">2019门诊</a></li>
+        <li><a href="2019-zhuyuan.html" target="myFrameName">2019住院</a></li>
+        <li><a href="2018-menzhen.html" target="myFrameName">2018门诊</a></li>
+        <li><a href="2018-zhuyuan.html" target="myFrameName">2018住院</a></li>
+        <li><a href="2017-menzhen.html" target="myFrameName">2016门诊</a></li>
+        <li><a href="2017-zhuyuan.html" target="myFrameName">2017住院</a></li>
+        <li><a href="2016-menzhen.html" target="myFrameName">2016门诊</a></li>
+        <li><a href="2016-zhuyuan.html" target="myFrameName">2016住院</a></li>
+        <li><a href="2015-menzhen.html" target="myFrameName">2015门诊</a></li>
+        <li><a href="2015-zhuyuan.html" target="myFrameName">2015住院</a></li>
+        <li><a href="sample.html" target="myFrameName">sample</a></li>
+    </ul>
+</div>
+<div style="float:right;">
+    <iframe id="myFrameId" name="myFrameName" scrolling="no" frameborder="0" style="width:2000px; height:1500px; " src="2019-menzhen.html"></iframe>
+</div>
+</body>
