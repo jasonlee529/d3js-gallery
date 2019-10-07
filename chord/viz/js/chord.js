@@ -1,6 +1,8 @@
 function chord(url){
     var data = [],
-    arc = {};
+    arc = {},arcs=[];
+    var sortOrder = [
+    ];
 var colorArr = ["#da4480",
     "#5ab449",
     "#7f5acd",
@@ -24,75 +26,72 @@ var colorArr = ["#da4480",
 ];
 colorArr = colorArr.concat(d3.schemeCategory20c);
 d3.csv(url, function(msg) {
-    console.log(msg);
     msg.forEach(function(n) {
-        arc[n.source] = arc[n.source] ? arc[n.source] + 1 : 1;
-        arc[n.target] = arc[n.target] ? arc[n.target] + 1 : 1;
+        n.weight=+n.weight;
+        console.log(typeof n.weight);
+        if(arc[n.source]){
+            arc[n.source]['weight']= arc[n.source]['weight'] + n.weight;
+        }else{
+            arc[n.source]={name:n.source,type:n.source_type,weight:n.weight};
+        }
+        if(arc[n.target]){
+            arc[n.target]['weight']= arc[n.target]['weight'] + n.weight;
+        }else{
+            arc[n.target]={name:n.target,type:n.target_type,weight:n.weight};
+        }
         var arr = [];
         arr[0] = n.source;
         arr[1] = n.target;
         arr[2] = n.weight;
+        arr[3] = n.source_type;
         data.push(arr);
         var arr = [];
         arr[0] = n.target;
         arr[1] = n.source;
         arr[2] = n.weight;
+        arr[3] = n.target_type;
         data.push(arr);
     })
     draw(data, arc);
 })
 
 function draw(data, arc) {
-    console.log(data);
     console.log(arc);
-
     var colors = {
         "疾病": "#da4480",
         "症状": "#5ab449"
-            // ,"Bournemouth":    "#7f5acd"
-            // ,"Chelsea":        "#aab740"
-            // ,"Crystal Palace": "#ce58c0"
-            // ,"Everton":        "#50a26e"
-            // ,"Leicester City": "#d1434b"
-            // ,"Liverpool":      "#45c0bc"
-            // ,"Manchester City":"#ce5929"
-            // ,"Manchester Utd": "#4e7bda"
-            // ,"Newcastle Utd":  "#d49d3c"
-            // ,"Norwich City":   "#6660a3"
-            // ,"Southampton":    "#7b853c"
-            // ,"Stoke City":     "#b58dde"
-            // ,"Sunderland":     "#97622e"
-            // ,"Swansea City":   "#609dd6"
-            // ,"Tottenham":      "#e29074"
-            // ,"Watford":        "#9c4b88"
-            // ,"West Bromwich":  "#ab505f"
-            // ,"West Ham Utd":   "#dc85b6"
     };
-
-    var sortOrder = [
-        "疾病", "症状"
-    ];
     for (var key in arc) {
-        sortOrder.push(key);
+        sortOrder.push(arc[key]);
         colors[key] = colorArr[arc[key] % colorArr.length];
     }
+    sortOrder.sort(function(a,b){
+        if(a.type<b.type){
+            return -1;
+        }else if(a.type==b.type){
+            return b.weight-a.weight;
+        }else{
+            return 1;
+        }
+    })
+    console.log(sortOrder);
     colors["疾病"] = "#da4480";
     colors["症状"] = "#5ab449";
-    console.log(colors);
 
     function sort(a, b) {
-        return d3.ascending(sortOrder.indexOf(a), sortOrder.indexOf(b));
+        var a1 = arc[a];
+        var b1 = arc[b];
+        return d3.ascending(sortOrder.indexOf(a1), sortOrder.indexOf(b1));
     }
 
     var ch = viz.chord().data(data)
         .sort(sort)
         .label(function(d) {
-            console.log(d);
             return d.source;
         })
         .innerRadius(430)
         .outerRadius(450)
-        .startAngle(0)
+        .startAngle(Math.PI)
         // .duration(1000)
         .chordOpacity(0.3);
 
@@ -104,6 +103,6 @@ function draw(data, arc) {
     svg.append("g").attr("transform", "translate(600,550)").call(ch);
 
     // adjust height of frame in bl.ocks.org
-    d3.select(self.frameElement).style("height", height + "px").style("width", width + "px");
+    d3.select(self.frameElement).style("height", height+100 + "px").style("width", width + "px");
 }
 }
