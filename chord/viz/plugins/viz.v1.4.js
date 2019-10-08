@@ -206,7 +206,8 @@
                     var g = map.get(d.index);
                     return {
                         path: _or === "vertical" ?
-                            edgeVert(d.x + d.width, d.y + d.height, g.x - g.width, g.y + g.height, g.x - g.width, g.y - g.height, d.x + d.width, d.y - d.height) : edgeHoriz(d.x - d.width, d.y + d.height, g.x - g.width, g.y - g.height, g.x + g.width, g.y - g.height, d.x + d.width, d.y + d.height),
+                            edgeVert(d.x + d.width, d.y + d.height, g.x - g.width, g.y + g.height, g.x - g.width, g.y - g.height, d.x + d.width, d.y - d.height) :
+                            edgeHoriz(d.x - d.width, d.y + d.height, g.x - g.width, g.y - g.height, g.x + g.width, g.y - g.height, d.x + d.width, d.y + d.height),
                         primary: d.primary,
                         secondary: d.secondary,
                         value: d.value,
@@ -234,12 +235,8 @@
                 var ln = 0,
                     lp = 0,
                     t = d3.sum(a, function(d) { return d.value; }); // left over count and percent.
-                a.forEach(function(d) {
-                    if (d.value < r * t) {
-                        ln += 1;
-                        lp += d.value;
-                    }
-                })
+                a.forEach(function(d) { if (d.value < r * t) { ln += 1;
+                        lp += d.value; } })
                 var o = t < 1e-5 ? 0 : (e - s - 2 * a.length * p - ln * m) / (t - lp); // scaling factor for percent.
                 var b = s,
                     ret = [];
@@ -807,18 +804,14 @@
             keys.forEach(function(k) {
                 subgrp[k] = {};
                 chordExist[k] = {};
-                keys.forEach(function(l) {
-                    subgrp[k][l] = 0;
-                    chordExist[k][l] = false;
-                })
+                keys.forEach(function(l) { subgrp[k][l] = 0;
+                    chordExist[k][l] = false; })
             });
 
-            data.forEach(function(d) {
-                var s = source(d),
+            data.forEach(function(d) { var s = source(d),
                     t = target(d);
                 subgrp[s][t] += value(d);
-                chordExist[s][t] = true;
-            });
+                chordExist[s][t] = true; });
 
             groups = [];
 
