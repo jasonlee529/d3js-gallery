@@ -84,6 +84,7 @@ function chord(url) {
         var ch = viz.chord().data(data)
             .sort(sort)
             .label(function(d) {
+                console.log(d.value);
                 return d.source;
             }).labelPadding(1.05)
             .innerRadius(430)
