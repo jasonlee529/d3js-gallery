@@ -1,0 +1,50 @@
+<!doctype>
+<html>
+<meta charset="UTF-8">
+
+<head>
+    <link href="./js/style.css" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/d3/2.10.0/d3.v2.js"></script>
+    <style>
+        text {
+            fill: white;
+        }
+    </style>
+</head>
+
+<body style=" background-image: url(./images/bg.png ); background-color: rgba(13, 42, 67, 0); 
+ background-size: cover;background-repeat: no-repeat;">
+    <div style="margin:20px 0 100px;">
+        <form>
+            <label style="color:red;">只接受csv文件:三列分别为pati_id,pati_visit_id,illn_name
+                        <input type="file" onchange="jsReadFiles(this.files)"/>
+                </label>
+        </form>
+    </div>
+    <div>
+        <div id="mainDiv" style="margin-left:auto;margin-right:auto">
+            <div id="svgDiv">
+            </div>
+        </div>
+    </div>
+    <script src="../plugins/d3.v4.min.js"></script>
+    <script src="./plugins/viz.v1.4.js"></script>
+    <script src="./js/chord.js"></script>
+    <script>
+        //js 读取文件
+        function jsReadFiles(files) {
+            d3.select('#mainDiv').empty();
+            console.log(files.length);
+            if (files.length) {
+                var file = files[0];
+                var reader = new FileReader(); //new一个FileReader实例
+                reader.onload = function() {
+                    chord(this.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+
+</html>>
